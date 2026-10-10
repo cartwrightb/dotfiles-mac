@@ -1,0 +1,31 @@
+# Operating-system and editor noise
+.DS_Store
+*~
+*.swp
+*.swo
+
+# Local and private overrides
+*.local
+*.private
+.env
+.env.*
+!.env.example
+
+# Credentials and private keys
+credentials
+credentials.*
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_rsa_*
+id_ed25519
+id_ed25519_*
+
+# Generated state
+**/.cache/
+**/.local/state/
+**/.bash_history
+**/.zsh_history
+**/.python_history
