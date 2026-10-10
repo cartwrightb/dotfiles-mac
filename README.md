@@ -45,6 +45,10 @@ dotfiles-mac/
 ├── starship/
 │   └── .config/
 │       └── starship.toml
+├── tmux/
+│   └── .config/
+│       └── tmux/
+│           └── tmux.conf
 ├── README.md
 ├── AGENTS.md
 └── .gitignore
@@ -54,8 +58,8 @@ Documentation and repository metadata are not Stow packages.
 
 ## Initial Configuration
 
-Managed packages are `ghostty`, `aerospace`, and `starship`. Ghostty adapts the Linux
-Alacritty appearance:
+Managed packages are `ghostty`, `aerospace`, `starship`, and `tmux`.
+Ghostty adapts the Linux Alacritty appearance:
 
 - JetBrainsMono Nerd Font, size 14.
 - Black background and light-grey foreground.
@@ -83,12 +87,26 @@ the input marker on the same line. This retains Starship rather than recreating
 Fedora's Bash prompt. The existing Mac `~/.zshrc` initializes Starship; that
 shell file is not yet managed by this repository.
 
+Tmux targets Homebrew tmux 3.8. It preserves the Fedora Ctrl+A prefix,
+Vim-style pane navigation and copy mode, Option-only navigation, one-based
+numbering, mouse support, current-directory splits, and compact dark status
+bar. The only functional change from the Fedora configuration is the
+`xterm-ghostty:RGB` terminal declaration. There are no plugins, clipboard
+utilities, shell changes, or automatic tmux startup.
+
+Ghostty provides Option-as-Alt and terminal clipboard integration. AeroSpace's
+Ctrl+Option bindings remain separate. Tmux intercepts Option navigation and
+Shift+Left/Right before terminal applications; Ctrl+A twice sends Ctrl+A
+through. See [docs/shortcuts.md](docs/shortcuts.md) for copy-mode behaviour.
+
+Preferred pane navigation is Ctrl+A followed by lowercase h/j/k/l. Existing
+Option pane bindings remain alternatives. Ghostty uses
+`macos-option-as-alt = true` without explicit Option+H/J/K/L key overrides.
+
 ## Planned Direction
 
 - Shell: retain Zsh and Starship; manage small shell fragments and private
   local overrides when reviewed.
-- Tmux: preserve Ctrl+A, Vim navigation/copy mode, one-based numbering,
-  working-directory-preserving splits, and the compact status bar.
 - Use native launcher, menu bar, locking, screenshots, and system controls
   initially.
 - Zed settings are available in the Linux reference. That repository has
@@ -143,6 +161,18 @@ file, and XDG_CONFIG_HOME can change the default directory; review these before
 deployment. Use `starship` in the deployment/removal commands below only when
 requested. The package does not change shell initialization.
 
+Inspect `~/.tmux.conf`, `~/.config/tmux/tmux.conf`, any active XDG_CONFIG_HOME,
+and `/opt/homebrew/etc/tmux.conf` before deploying tmux. Preview independently:
+
+```bash
+stow --no --verbose=2 --target="$HOME" tmux
+```
+
+Use `tmux` in the deployment/removal commands below only when requested.
+Existing tmux servers load configuration at startup; deployment alone does
+not reload them. Applications inside tmux use `TERM=tmux-256color`, which
+remote machines may also need in their terminfo database.
+
 Compare and back up conflicting files before proceeding. Do not use
 `stow --adopt` to resolve conflicts automatically.
 
@@ -192,6 +222,11 @@ After authorized deployment, verify desktop shortcuts, resize mode, floating
 focus, and Ghostty launch behaviour on the actual keyboard.
 
 Contributor and automation rules are in `AGENTS.md`.
+
+Validate tmux using an isolated temporary server/socket with the repository
+configuration, inspect its errors, options, and key bindings, then stop only
+that test server. After authorized deployment, check Option shortcuts,
+Shift+arrows, split directories, and copying to the macOS clipboard in Ghostty.
 
 ## References
 

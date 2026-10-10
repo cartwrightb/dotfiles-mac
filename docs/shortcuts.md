@@ -48,9 +48,57 @@ browser navigation, and Command+W to close a window. Use Command+Space for
 Spotlight, Ctrl+Command+Q to lock, and Command+Shift+3/4/5 for screenshots.
 
 AeroSpace does not bind Option-only shortcuts or Ctrl+A. This preserves the
-Linux tmux workflow: Ctrl+A prefix, Option+H/J/K/L pane navigation, and
-Option+1–9 window selection. Tmux itself is not yet managed by this repository.
+Linux tmux workflow: Ctrl+A prefix, prefix-based pane navigation, and
+Option+1–9 window selection. Tmux is managed as an independent Stow package.
 Ghostty's managed configuration treats Option as Alt.
+
+## Tmux
+
+`Prefix` means press Ctrl+A, release it, then press the next key. Letter
+bindings below are lowercase; they do not require Shift.
+
+Preferred pane navigation is Ctrl+A followed by h/j/k/l. The existing Option
+bindings remain alternatives. Ghostty treats both Option keys as Alt, without
+explicit Option+H/J/K/L overrides.
+
+| Shortcut | Action |
+| --- | --- |
+| Prefix Ctrl+A | Send Ctrl+A to the application |
+| Prefix r | Reload `~/.config/tmux/tmux.conf` |
+| Prefix = or v | Split into side-by-side panes |
+| Prefix - or s | Split into above/below panes |
+| Prefix h/j/k/l | Focus the pane left/down/up/right (preferred) |
+| Option+H/J/K/L | Alternative pane navigation, if delivered as Meta sequences |
+| Shift+Left/Right | Previous/next window |
+| Option+1–9 | Select window 1–9 |
+| Prefix [ | Enter Vim-style copy mode |
+
+Windows and panes start at 1; windows renumber after removal. Splits inherit
+the active pane's working directory. Built-in tmux resize and zoom bindings
+remain available. The status bar shows the session, numbered windows, active
+pane directory, and date/time using the Fedora dark grey and muted blue palette.
+
+### Copy Mode and Mouse
+
+| Key in copy mode | Action |
+| --- | --- |
+| v | Begin selection |
+| Ctrl+V | Toggle rectangular selection |
+| y | Copy selection and exit |
+
+Mouse support enables pane selection, border dragging, and scrollback.
+Releasing a drag selection does not automatically copy and exit; use `y`.
+Terminal clipboard integration uses Ghostty, without extra utilities or plugins.
+Command+C is Ghostty's copy action, distinct from tmux copy-mode `y`.
+
+### Keyboard Conflicts
+
+- AeroSpace uses Ctrl+Option, distinct from tmux's Option-only navigation.
+- Ctrl+A becomes the tmux prefix; press it twice for Zsh's beginning-of-line action.
+- Option+H/J/K/L, Option+1–9, and Shift+Left/Right are intercepted by tmux
+  rather than passed to terminal applications. This matches the Fedora setup.
+- Verify Option and Shift+arrow delivery and macOS clipboard copying after
+  deployment. Application-specific and custom Logitech shortcuts may differ.
 
 ## Conflicts and Differences from Sway
 

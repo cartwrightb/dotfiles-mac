@@ -19,7 +19,7 @@ work here. Make macOS changes only in `~/repos/dotfiles-mac`.
 - Package contents mirror paths below `$HOME`.
 - Use XDG paths when supported by the application on macOS.
 - README.md, AGENTS.md, and .gitignore are repository metadata.
-- Managed packages are `ghostty`, `aerospace`, and `starship`.
+- Managed packages are `ghostty`, `aerospace`, `starship`, and `tmux`.
 - Do not create placeholder packages or copy entire third-party setups.
 
 ## Design Rules
@@ -37,6 +37,11 @@ work here. Make macOS changes only in `~/repos/dotfiles-mac`.
 - Keep AeroSpace login startup and automatic reload disabled unless requested.
 - Starship changes only prompt spacing: no preceding blank line and no
   separate input line. Preserve all other Starship defaults.
+- Tmux preserves the Fedora Ctrl+A prefix, Option navigation, copy mode,
+  mouse behaviour, numbering, split directories, and status palette.
+  Use Ghostty's RGB declaration; do not add plugins or startup automation.
+- Prefer Ctrl+A followed by h/j/k/l for tmux pane navigation. Preserve the
+  existing Option bindings as alternatives; do not add Ghostty key overrides.
 
 ## Safe Workflow
 
@@ -63,6 +68,9 @@ custom system/app shortcuts for Ctrl+Option conflicts.
 For Starship, inspect `~/.config/starship.toml`, XDG_CONFIG_HOME, and
 STARSHIP_CONFIG before deployment. The package uses the default XDG path.
 
+For tmux, inspect `~/.tmux.conf`, `~/.config/tmux/tmux.conf`, any active
+XDG_CONFIG_HOME, and Homebrew's `/opt/homebrew/etc/tmux.conf` before deployment.
+
 ## Private Data
 
 Never commit secrets, credentials, tokens, cookies, private keys,
@@ -75,6 +83,9 @@ Preserve unrelated user changes.
 - Inspect `git diff` and run `git diff --check`.
 - Preview Stow deployment for affected packages.
 - Use application-native validation where available.
+- Validate tmux on an isolated temporary socket with the repository file;
+  inspect configuration errors, options, and bindings, then remove that test
+  server. Never source configuration into an existing server without a request.
 - For Starship, parse TOML and inspect `starship print-config` with
   STARSHIP_CONFIG set only for that process to the repository file.
 - For AeroSpace, parse TOML and use `aerospace reload-config --dry-run`
