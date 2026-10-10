@@ -36,6 +36,12 @@ dotfiles-mac/
 │   └── .config/
 │       └── ghostty/
 │           └── config.ghostty
+├── aerospace/
+│   └── .config/
+│       └── aerospace/
+│           └── aerospace.toml
+├── docs/
+│   └── shortcuts.md
 ├── README.md
 ├── AGENTS.md
 └── .gitignore
@@ -45,7 +51,7 @@ Documentation and repository metadata are not Stow packages.
 
 ## Initial Configuration
 
-Ghostty is the only managed package. Its configuration adapts the Linux
+Managed packages are `ghostty` and `aerospace`. Ghostty adapts the Linux
 Alacritty appearance:
 
 - JetBrainsMono Nerd Font Mono, size 11.
@@ -58,15 +64,22 @@ Option-as-Alt changes Option-based special-character entry in the terminal.
 
 Ghostty and the selected font are installed separately.
 
+AeroSpace targets 0.21.3-Beta and uses Ctrl+Option for desktop navigation,
+Shift for window movement, and numbered workspaces 1–10. Command shortcuts,
+Option-only tmux shortcuts, and Ctrl+A remain available. Layouts retain
+AeroSpace's default container normalization and zero gaps. Login startup and
+automatic reload are disabled.
+
+Ctrl+Option conflicts with VoiceOver when it uses that modifier. Review custom
+system, application, and Logitech shortcuts before deployment. See
+[docs/shortcuts.md](docs/shortcuts.md) for bindings and Sway differences.
+
 ## Planned Direction
 
 - Shell: small fragments, a simple Git-aware prompt, and private local
   overrides; choose the macOS shell before implementing.
 - Tmux: preserve Ctrl+A, Vim navigation/copy mode, one-based numbering,
   working-directory-preserving splits, and the compact status bar.
-- AeroSpace: translate the Sway workspace and navigation workflow later.
-  No AeroSpace configuration or installation is included.
-- Keep Option-based tmux shortcuts in mind when choosing desktop bindings.
 - Use native launcher, menu bar, locking, screenshots, and system controls
   initially.
 - Zed settings are available in the Linux reference. That repository has
@@ -77,8 +90,8 @@ Linux hardware identifiers, and host-specific window rules are omitted.
 
 ## Deployment
 
-Git, GNU Stow, and Ghostty must already be available. No installation or
-deployment is performed automatically.
+Git, GNU Stow, and the application being configured must already be available.
+No installation or deployment is performed automatically.
 
 Inspect existing Ghostty files and symlinks first, including:
 
@@ -87,6 +100,22 @@ Inspect existing Ghostty files and symlinks first, including:
 
 Ghostty loads macOS-specific configuration after XDG configuration;
 later conflicting values override earlier ones.
+
+For AeroSpace, inspect `~/.aerospace.toml` and
+`~/.config/aerospace/aerospace.toml`. If XDG_CONFIG_HOME is set, inspect its
+`aerospace/aerospace.toml` instead. AeroSpace reports ambiguity if both supported
+locations contain configuration. The package targets the default XDG path;
+review deployment separately if XDG_CONFIG_HOME points elsewhere.
+
+Preview AeroSpace independently:
+
+```bash
+stow --no --verbose=2 --target="$HOME" aerospace
+```
+
+This is a preview only. Deployment, reload, and login changes require a
+separate request. Use the same Stow commands below with `aerospace` instead
+of `ghostty` when its deployment or removal is requested.
 
 From this repository, preview deployment:
 
@@ -126,9 +155,18 @@ Preview Stow links and use application-native validation where available.
 After deployment, check Ghostty appearance, Option shortcuts, and clipboard
 behaviour interactively.
 
+Parse AeroSpace TOML before deployment. `aerospace reload-config --dry-run`
+validates without reloading, but checks the configuration selected by the
+running app; it cannot validate an arbitrary undeployed repository path.
+Do not deploy or launch a second app instance merely to enable this check.
+After authorized deployment, verify desktop shortcuts, resize mode, floating
+focus, and Ghostty launch behaviour on the actual keyboard.
+
 Contributor and automation rules are in `AGENTS.md`.
 
 ## References
 
 - https://ghostty.org/docs/config
 - https://ghostty.org/docs/config/reference
+- https://nikitabobko.github.io/AeroSpace/guide
+- https://nikitabobko.github.io/AeroSpace/commands

@@ -19,7 +19,7 @@ work here. Make macOS changes only in `~/repos/dotfiles-mac`.
 - Package contents mirror paths below `$HOME`.
 - Use XDG paths when supported by the application on macOS.
 - README.md, AGENTS.md, and .gitignore are repository metadata.
-- The initial managed package is `ghostty`.
+- Managed packages are `ghostty` and `aerospace`.
 - Do not create placeholder packages or copy entire third-party setups.
 
 ## Design Rules
@@ -31,8 +31,10 @@ work here. Make macOS changes only in `~/repos/dotfiles-mac`.
 - Prefer native macOS facilities for system functions.
 - Translate Linux behaviour; do not copy Fedora integration or device IDs.
 - Keep host-specific settings outside the portable base.
-- AeroSpace is deferred. Do not install or configure it without a later
-  explicit user request.
+- AeroSpace uses Ctrl+Option (`ctrl-alt`), with Shift for window movement.
+  Preserve macOS Command shortcuts, Option-only tmux shortcuts, and Ctrl+A.
+- Keep numbered workspaces 1–10 and document bindings in `docs/shortcuts.md`.
+- Keep AeroSpace login startup and automatic reload disabled unless requested.
 
 ## Safe Workflow
 
@@ -51,6 +53,11 @@ application reloads, software installation, or system changes.
 For Ghostty, inspect both XDG and macOS Application Support configuration.
 The latter loads afterward and may override the managed XDG settings.
 
+For AeroSpace, inspect both `~/.aerospace.toml` and
+`~/.config/aerospace/aerospace.toml` (or the active XDG_CONFIG_HOME).
+Having configurations in both locations is ambiguous. Check VoiceOver and
+custom system/app shortcuts for Ctrl+Option conflicts.
+
 ## Private Data
 
 Never commit secrets, credentials, tokens, cookies, private keys,
@@ -63,5 +70,8 @@ Preserve unrelated user changes.
 - Inspect `git diff` and run `git diff --check`.
 - Preview Stow deployment for affected packages.
 - Use application-native validation where available.
+- For AeroSpace, parse TOML and use `aerospace reload-config --dry-run`
+  when available. It checks the app's configured path, not an arbitrary
+  repository file; do not deploy or reload merely to enable validation.
 - Report checks that could not run and why.
 - Check appearance and keyboard behaviour after an authorized deployment.
