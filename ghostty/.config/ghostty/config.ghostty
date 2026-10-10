@@ -1,12 +1,10 @@
-# Preserve the Linux terminal's restrained appearance.
-font-family = JetBrainsMono Nerd Font Mono
-font-size = 11
+font-family = JetBrainsMono Nerd Font
+font-size = 14
 
 background = #000000
 foreground = #d4d4d4
-background-opacity = 0.95
+background-opacity = 0.92
 
-# Padding is measured in points; review on the Mac display.
 window-padding-x = 8
 window-padding-y = 8
 

@@ -42,6 +42,9 @@ dotfiles-mac/
 │           └── aerospace.toml
 ├── docs/
 │   └── shortcuts.md
+├── starship/
+│   └── .config/
+│       └── starship.toml
 ├── README.md
 ├── AGENTS.md
 └── .gitignore
@@ -51,15 +54,15 @@ Documentation and repository metadata are not Stow packages.
 
 ## Initial Configuration
 
-Managed packages are `ghostty` and `aerospace`. Ghostty adapts the Linux
+Managed packages are `ghostty`, `aerospace`, and `starship`. Ghostty adapts the Linux
 Alacritty appearance:
 
-- JetBrainsMono Nerd Font Mono, size 11.
+- JetBrainsMono Nerd Font, size 14.
 - Black background and light-grey foreground.
-- 95% background opacity and modest padding.
+- 92% background opacity and modest padding.
 - Option treated as Alt for terminal shortcuts.
 
-Font size and padding are starting values to review on the Mac display.
+These settings preserve the current working macOS terminal appearance.
 Option-as-Alt changes Option-based special-character entry in the terminal.
 
 Ghostty and the selected font are installed separately.
@@ -74,10 +77,16 @@ Ctrl+Option conflicts with VoiceOver when it uses that modifier. Review custom
 system, application, and Logitech shortcuts before deployment. See
 [docs/shortcuts.md](docs/shortcuts.md) for bindings and Sway differences.
 
+Starship keeps its default Git icons, colours, status information, and other
+modules. Its only overrides remove the blank line before each prompt and put
+the input marker on the same line. This retains Starship rather than recreating
+Fedora's Bash prompt. The existing Mac `~/.zshrc` initializes Starship; that
+shell file is not yet managed by this repository.
+
 ## Planned Direction
 
-- Shell: small fragments, a simple Git-aware prompt, and private local
-  overrides; choose the macOS shell before implementing.
+- Shell: retain Zsh and Starship; manage small shell fragments and private
+  local overrides when reviewed.
 - Tmux: preserve Ctrl+A, Vim navigation/copy mode, one-based numbering,
   working-directory-preserving splits, and the compact status bar.
 - Use native launcher, menu bar, locking, screenshots, and system controls
@@ -123,6 +132,17 @@ From this repository, preview deployment:
 stow --no --verbose=2 --target="$HOME" ghostty
 ```
 
+Preview Starship independently:
+
+```bash
+stow --no --verbose=2 --target="$HOME" starship
+```
+
+Inspect `~/.config/starship.toml` first. STARSHIP_CONFIG can select a different
+file, and XDG_CONFIG_HOME can change the default directory; review these before
+deployment. Use `starship` in the deployment/removal commands below only when
+requested. The package does not change shell initialization.
+
 Compare and back up conflicting files before proceeding. Do not use
 `stow --adopt` to resolve conflicts automatically.
 
@@ -155,6 +175,15 @@ Preview Stow links and use application-native validation where available.
 After deployment, check Ghostty appearance, Option shortcuts, and clipboard
 behaviour interactively.
 
+Validate Starship TOML and inspect its computed configuration without changing
+the active shell:
+
+```bash
+STARSHIP_CONFIG="$PWD/starship/.config/starship.toml" starship print-config
+```
+
+Only `add_newline` and `line_break.disabled` should differ from Starship defaults.
+
 Parse AeroSpace TOML before deployment. `aerospace reload-config --dry-run`
 validates without reloading, but checks the configuration selected by the
 running app; it cannot validate an arbitrary undeployed repository path.
@@ -170,3 +199,4 @@ Contributor and automation rules are in `AGENTS.md`.
 - https://ghostty.org/docs/config/reference
 - https://nikitabobko.github.io/AeroSpace/guide
 - https://nikitabobko.github.io/AeroSpace/commands
+- https://starship.rs/config/

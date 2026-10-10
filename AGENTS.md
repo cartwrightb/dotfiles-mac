@@ -19,7 +19,7 @@ work here. Make macOS changes only in `~/repos/dotfiles-mac`.
 - Package contents mirror paths below `$HOME`.
 - Use XDG paths when supported by the application on macOS.
 - README.md, AGENTS.md, and .gitignore are repository metadata.
-- Managed packages are `ghostty` and `aerospace`.
+- Managed packages are `ghostty`, `aerospace`, and `starship`.
 - Do not create placeholder packages or copy entire third-party setups.
 
 ## Design Rules
@@ -35,6 +35,8 @@ work here. Make macOS changes only in `~/repos/dotfiles-mac`.
   Preserve macOS Command shortcuts, Option-only tmux shortcuts, and Ctrl+A.
 - Keep numbered workspaces 1–10 and document bindings in `docs/shortcuts.md`.
 - Keep AeroSpace login startup and automatic reload disabled unless requested.
+- Starship changes only prompt spacing: no preceding blank line and no
+  separate input line. Preserve all other Starship defaults.
 
 ## Safe Workflow
 
@@ -58,6 +60,9 @@ For AeroSpace, inspect both `~/.aerospace.toml` and
 Having configurations in both locations is ambiguous. Check VoiceOver and
 custom system/app shortcuts for Ctrl+Option conflicts.
 
+For Starship, inspect `~/.config/starship.toml`, XDG_CONFIG_HOME, and
+STARSHIP_CONFIG before deployment. The package uses the default XDG path.
+
 ## Private Data
 
 Never commit secrets, credentials, tokens, cookies, private keys,
@@ -70,6 +75,8 @@ Preserve unrelated user changes.
 - Inspect `git diff` and run `git diff --check`.
 - Preview Stow deployment for affected packages.
 - Use application-native validation where available.
+- For Starship, parse TOML and inspect `starship print-config` with
+  STARSHIP_CONFIG set only for that process to the repository file.
 - For AeroSpace, parse TOML and use `aerospace reload-config --dry-run`
   when available. It checks the app's configured path, not an arbitrary
   repository file; do not deploy or reload merely to enable validation.
