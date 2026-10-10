@@ -19,8 +19,10 @@ work here. Make macOS changes only in `~/repos/dotfiles-mac`.
 - Package contents mirror paths below `$HOME`.
 - Use XDG paths when supported by the application on macOS.
 - README.md, AGENTS.md, and .gitignore are repository metadata.
-- Managed packages are `ghostty`, `aerospace`, `starship`, and `tmux`.
+- Managed packages are `ghostty`, `aerospace`, `starship`, `tmux`, and `nvim`.
 - Do not create placeholder packages or copy entire third-party setups.
+- Keep significant design decisions in `docs/decisions.md` and keyboard
+  commands in `docs/shortcuts.md`; keep both consistent with the packages.
 
 ## Design Rules
 
@@ -42,6 +44,9 @@ work here. Make macOS changes only in `~/repos/dotfiles-mac`.
   Use Ghostty's RGB declaration; do not add plugins or startup automation.
 - Prefer Ctrl+A followed by h/j/k/l for tmux pane navigation. Preserve the
   existing Option bindings as alternatives; do not add Ghostty key overrides.
+- Zed is the primary editor. Neovim is for quick terminal edits; configure
+  only absolute/relative line numbers and `clipboard = "unnamedplus"`.
+  Do not add plugins, themes, LSP, custom mappings, or other settings.
 
 ## Safe Workflow
 
@@ -71,6 +76,9 @@ STARSHIP_CONFIG before deployment. The package uses the default XDG path.
 For tmux, inspect `~/.tmux.conf`, `~/.config/tmux/tmux.conf`, any active
 XDG_CONFIG_HOME, and Homebrew's `/opt/homebrew/etc/tmux.conf` before deployment.
 
+For Neovim, inspect `~/.config/nvim/init.lua` and `init.vim`, XDG_CONFIG_HOME,
+and NVIM_APPNAME before deployment. The package uses the default XDG path.
+
 ## Private Data
 
 Never commit secrets, credentials, tokens, cookies, private keys,
@@ -83,6 +91,9 @@ Preserve unrelated user changes.
 - Inspect `git diff` and run `git diff --check`.
 - Preview Stow deployment for affected packages.
 - Use application-native validation where available.
+- Validate Neovim headlessly with the repository init.lua, ShaDa disabled,
+  and temporary XDG state/cache/data directories. Check the three options
+  without modifying the user's editor state or clipboard contents.
 - Validate tmux on an isolated temporary socket with the repository file;
   inspect configuration errors, options, and bindings, then remove that test
   server. Never source configuration into an existing server without a request.

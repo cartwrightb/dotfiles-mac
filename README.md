@@ -41,6 +41,7 @@ dotfiles-mac/
 │       └── aerospace/
 │           └── aerospace.toml
 ├── docs/
+│   ├── decisions.md
 │   └── shortcuts.md
 ├── starship/
 │   └── .config/
@@ -49,6 +50,10 @@ dotfiles-mac/
 │   └── .config/
 │       └── tmux/
 │           └── tmux.conf
+├── nvim/
+│   └── .config/
+│       └── nvim/
+│           └── init.lua
 ├── README.md
 ├── AGENTS.md
 └── .gitignore
@@ -56,9 +61,13 @@ dotfiles-mac/
 
 Documentation and repository metadata are not Stow packages.
 
-## Initial Configuration
+The reasons behind the configuration are recorded in
+[docs/decisions.md](docs/decisions.md). Keyboard commands are in
+[docs/shortcuts.md](docs/shortcuts.md).
 
-Managed packages are `ghostty`, `aerospace`, `starship`, and `tmux`.
+## Current Configuration
+
+Managed packages are `ghostty`, `aerospace`, `starship`, `tmux`, and `nvim`.
 Ghostty adapts the Linux Alacritty appearance:
 
 - JetBrainsMono Nerd Font, size 14.
@@ -103,6 +112,14 @@ Preferred pane navigation is Ctrl+A followed by lowercase h/j/k/l. Existing
 Option pane bindings remain alternatives. Ghostty uses
 `macos-option-as-alt = true` without explicit Option+H/J/K/L key overrides.
 
+Zed remains the primary editor. Neovim is for quick terminal editing of
+configuration files and scripts. Its init.lua contains only three settings:
+absolute line numbers, relative line numbers, and `clipboard = "unnamedplus"`.
+Together, the number options show the current line's absolute number and
+relative numbers elsewhere. Ordinary yank, delete, and paste operations use
+the system clipboard through Neovim's built-in provider. Everything else
+retains Neovim defaults: no plugins, themes, LSP, or custom mappings.
+
 ## Planned Direction
 
 - Shell: retain Zsh and Starship; manage small shell fragments and private
@@ -111,6 +128,7 @@ Option pane bindings remain alternatives. Ghostty uses
   initially.
 - Zed settings are available in the Linux reference. That repository has
   no Neovim configuration to migrate.
+- Dual-monitor workspace assignments remain a later stage.
 
 Fedora startup, systemd integration, GTK settings, Wayland utilities,
 Linux hardware identifiers, and host-specific window rules are omitted.
@@ -173,6 +191,16 @@ Existing tmux servers load configuration at startup; deployment alone does
 not reload them. Applications inside tmux use `TERM=tmux-256color`, which
 remote machines may also need in their terminfo database.
 
+Inspect `~/.config/nvim/init.lua` and `init.vim` before deploying Neovim.
+XDG_CONFIG_HOME and NVIM_APPNAME can select a different configuration directory;
+review these first. Preview independently:
+
+```bash
+stow --no --verbose=2 --target="$HOME" nvim
+```
+
+Use `nvim` in the deployment/removal commands below only when requested.
+
 Compare and back up conflicting files before proceeding. Do not use
 `stow --adopt` to resolve conflicts automatically.
 
@@ -227,6 +255,12 @@ Validate tmux using an isolated temporary server/socket with the repository
 configuration, inspect its errors, options, and key bindings, then stop only
 that test server. After authorized deployment, check Option shortcuts,
 Shift+arrows, split directories, and copying to the macOS clipboard in Ghostty.
+
+Validate Neovim headlessly with `-u` pointing to the repository init.lua and
+`-i NONE` to disable ShaDa. Use temporary XDG state/cache/data directories and
+verify number, relativenumber, and clipboard options. Check clipboard-provider
+availability without changing clipboard contents; after deployment, verify
+line numbers and normal editing interactively.
 
 ## References
 

@@ -3,6 +3,7 @@
 The window-manager modifier is Ctrl+Option (`ctrl-alt` in AeroSpace TOML).
 The Logitech MX Keys S is in Mac mode; Command and Option behave as labelled.
 Letters below do not require Shift unless it is explicitly listed.
+Design rationale is recorded in [decisions.md](decisions.md).
 
 ## AeroSpace
 
@@ -99,6 +100,26 @@ Command+C is Ghostty's copy action, distinct from tmux copy-mode `y`.
   rather than passed to terminal applications. This matches the Fedora setup.
 - Verify Option and Shift+arrow delivery and macOS clipboard copying after
   deployment. Application-specific and custom Logitech shortcuts may differ.
+
+## Neovim
+
+Zed is the primary editor; use `nvim <file>` for quick terminal edits.
+Neovim has no custom mappings, plugins, themes, or LSP configuration.
+
+| Built-in command | Action |
+| --- | --- |
+| i, Escape | Enter Insert mode, return to Normal mode |
+| h/j/k/l | Move left/down/up/right in Normal mode |
+| 5j / 5k | Move five lines down/up using relative line numbers |
+| /pattern, n / N | Search, next/previous match |
+| yy / p | Yank the line / paste using the system clipboard |
+| :w / :q / :wq | Save / quit / save and quit |
+
+The current line shows its absolute number; other lines show relative numbers.
+`unnamedplus` connects normal yank/delete/paste operations to the system
+clipboard. Explicit registers remain available. No clipboard utilities are
+installed by this package. Ctrl+A remains tmux's prefix when editing inside
+tmux; press it twice to send Ctrl+A to Neovim.
 
 ## Conflicts and Differences from Sway
 
