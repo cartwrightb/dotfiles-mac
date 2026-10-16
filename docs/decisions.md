@@ -134,6 +134,11 @@ Keep all other Neovim defaults. Add no plugins, plugin managers, themes,
 LSP configuration, custom mappings, or extra options. Use its built-in
 clipboard provider and normal editing commands.
 
+Declare `vim` in `diagnostics.globals` in the repository-root `.luarc.json`
+so Zed's Lua language server recognises Neovim's runtime global. This is
+project editor metadata, outside the Stow packages; keep other diagnostics
+enabled and the three-line init.lua unchanged.
+
 ## Validation
 
 Review diffs and whitespace, preview Stow links, and use native validators.

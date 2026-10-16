@@ -64,6 +64,10 @@ dotfiles-mac/
 
 Documentation and repository metadata are not Stow packages.
 
+The root `.luarc.json` is editor metadata: it tells Zed's Lua language server
+that Neovim supplies the `vim` global when editing this repository. It is not
+deployed and does not change Neovim's runtime configuration.
+
 The reasons behind the configuration are recorded in
 [docs/decisions.md](docs/decisions.md). Keyboard commands are in
 [docs/shortcuts.md](docs/shortcuts.md).
