@@ -160,10 +160,26 @@ relative numbers elsewhere. Ordinary yank, delete, and paste operations use
 the system clipboard through Neovim's built-in provider. Everything else
 retains Neovim defaults: no plugins, themes, LSP, or custom mappings.
 
+## Raycast Launcher
+
+Raycast is installed and configured as the preferred application launcher.
+Option+Space opens Raycast; Command+Space retains macOS Spotlight as a fallback.
+Both shortcuts are confirmed working by the user.
+
+Install separately through Homebrew when setting up another Mac:
+
+```bash
+brew install --cask raycast
+```
+
+Raycast is not a Stow package. Keep its application-managed configuration local
+and use its encrypted settings export/import for backup or migration. See
+[decisions](docs/decisions.md#raycast) for the process and
+[shortcuts](docs/shortcuts.md) for launcher bindings.
+
 ## Planned Direction
 
-- Use native launcher, menu bar, locking, screenshots, and system controls
-  initially.
+- Use the native menu bar, locking, screenshots, and system controls initially.
 - Zed settings are available in the Linux reference. That repository has
   no Neovim configuration to migrate.
 

@@ -63,9 +63,17 @@ coordinate system and may look different from Sway's 10 pixels.
 
 ## Native macOS and Tmux
 
+| Launcher shortcut | Action |
+| --- | --- |
+| Option+Space | Raycast, preferred application launcher |
+| Command+Space | macOS Spotlight, retained as fallback |
+
+Both launcher shortcuts are confirmed working by the user. They do not overlap
+the managed AeroSpace, tmux, or Zsh bindings.
+
 Command shortcuts remain available, including copy, paste, save, find,
-browser navigation, and Command+W to close a window. Use Command+Space for
-Spotlight, Ctrl+Command+Q to lock, and Command+Shift+3/4/5 for screenshots.
+browser navigation, and Command+W to close a window. Use Ctrl+Command+Q to lock
+and Command+Shift+3/4/5 for screenshots.
 
 AeroSpace does not bind Option-only shortcuts or Ctrl+A. This preserves the
 Linux tmux workflow: Ctrl+A prefix, prefix-based pane navigation, and

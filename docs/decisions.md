@@ -50,10 +50,10 @@ fullscreen, and floating/tiling toggling. Use AeroSpace's native layouts and
 default container normalization; accordion approximates Sway's stacked/tabbed
 layouts. Use `/usr/bin/open -a Ghostty`, which may activate an existing window.
 
-Keep zero gaps and avoid extra bars or appearance helpers. Use native macOS
-launching, locking, screenshots, and system controls. Login startup and
-automatic reload remain disabled. Document the Ctrl+Option conflict with
-VoiceOver.
+Keep zero gaps and avoid extra bars or appearance helpers. Use Raycast for
+application launching and native macOS locking, screenshots, and system
+controls. Login startup and automatic reload remain disabled. Document the
+Ctrl+Option conflict with VoiceOver.
 
 Stage 5A uses `workspace-to-monitor-force-assignment` with portable display
 roles instead of host-specific monitor IDs or ambiguous identical model names.
@@ -71,6 +71,34 @@ separate design. Forced assignments prevent manual workspace-to-monitor moves.
 Existing bindings and all other settings are preserved. Stage 5A is deployed
 through Stow; the user confirmed the docked odd/even monitor assignments and
 existing shortcuts work interactively. Native dry-run validation also passed.
+
+## Raycast
+
+Use Raycast as the preferred application launcher with Option+Space. Retain
+Command+Space for Spotlight as a fallback; both shortcuts are user-confirmed.
+Installation is separate from dotfiles deployment: `brew install --cask raycast`.
+
+Do not create a Raycast Stow package. No supported declarative configuration
+was identified; Raycast manages databases, runtime state, and macOS preferences.
+Symlinking those files would couple the repository to mutable application data.
+Keep the existing managed package list unchanged.
+
+Use Raycast's supported manual backup and migration process:
+
+1. Run **Export Settings & Data** in Raycast and save the encrypted `.rayconfig`
+   file outside this repository. Set an export passphrase when prompted and
+   retain it privately for restoration.
+2. On the destination Mac, install Raycast, run **Import Settings & Data**,
+   select the export, and enter its passphrase when prompted. Review the
+   available categories and import only those needed.
+3. Verify Option+Space opens Raycast and Command+Space still opens Spotlight.
+
+Exports can contain personal content as well as settings. Keep them out of Git;
+`*.rayconfig` is ignored. Export/import is a manual operation and is not run
+by Stow or repository automation.
+
+References: [Raycast Import & Export](https://manual.raycast.com/import-export)
+and [Homebrew cask](https://formulae.brew.sh/cask/raycast).
 
 ## Zsh and Starship
 
