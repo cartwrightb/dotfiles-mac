@@ -55,8 +55,32 @@ VoiceOver. Dual-monitor workspace assignments remain a later stage.
 Keep the existing Zsh and Starship setup instead of reproducing Fedora's Bash
 prompt. Preserve Starship's default Git icons, colours, status, and other
 modules. Override only `add_newline = false` and `line_break.disabled = true`
-for a compact single-line prompt. Shell initialization is currently local,
-not managed as a Stow package.
+for a compact single-line prompt. The independent `shell` Stow package
+preserves Homebrew initialization in `.zprofile` and Starship initialization
+in `.zshrc`. Use Zsh's native HOME startup paths without adding a ZDOTDIR
+bootstrap or fragment loader.
+
+Enable native completion with `compinit`, including Homebrew's supplied
+completion directory for non-login shells. Keep completion security checks.
+Load fzf's built-in Zsh integration after compinit when fzf is available;
+retain its file walker, standard bindings, and completion trigger.
+
+Keep `~/.zsh_history` outside the repository, with HISTSIZE and SAVEHIST both
+10,000. Enable INC_APPEND_HISTORY and HIST_IGNORE_DUPS. Leave automatic
+history importing between running shells disabled. Preserve the default
+editing keymap and Ctrl+A behaviour.
+
+Preserve Fedora's `ll='ls -lah'`; add only `lt='eza --tree --level=2'`.
+Keep standard commands unchanged and use the installed CLI tools directly.
+Add no `..` alias, frameworks, plugins, custom fzf generators, or automatic
+tmux startup. Source optional untracked `~/.zshrc.local` last so local settings
+can override the portable base. The existing `*.local` ignore rule covers it.
+
+Deploy the startup files through Stow. On machines with existing regular
+files, back up and verify both before an explicitly authorized replacement;
+never adopt them automatically. Stage 4A is deployed on the MacBook; confirmed
+behaviour and remaining interactive checks are recorded in README.md and
+shortcuts.md.
 
 ## Tmux
 

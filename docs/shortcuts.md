@@ -101,6 +101,51 @@ Command+C is Ghostty's copy action, distinct from tmux copy-mode `y`.
 - Verify Option and Shift+arrow delivery and macOS clipboard copying after
   deployment. Application-specific and custom Logitech shortcuts may differ.
 
+## Zsh and CLI
+
+The `shell` package enables native Zsh completion and fzf's supplied integration.
+Keep the default editing keymap; no custom shell key bindings are added.
+
+### Keyboard Shortcuts
+
+Stage 4A is deployed. The user confirmed native Git Tab completion and fzf
+Ctrl+R history search on the MacBook. Completion registrations and fzf widget
+bindings were also verified in isolated Zsh shells on macOS. Other interactive
+checks remain pending as listed below; tmux-specific checks were not reported.
+
+| Shortcut | Action | Verification |
+| --- | --- | --- |
+| Tab | Native Zsh command and argument completion, including paths and options | Git completion confirmed interactively |
+| `**` then Tab, e.g. `nvim **` | fzf fuzzy completion | Configured; interactive check pending |
+| Ctrl+R | fzf fuzzy command-history search | Confirmed interactively |
+| Ctrl+T | fzf fuzzy file selection; insert selected file/directory paths | Binding verified; interactive check pending |
+| Option+C | fzf fuzzy directory navigation; change to the selected directory | Alt+C binding verified; physical Option+C check pending |
+| Ctrl+A | Beginning of line; inside tmux, press Ctrl+A twice | Zsh binding verified; interactive check pending |
+
+fzf replaces Zsh's default Ctrl+R incremental history search, Ctrl+T character
+transposition, and Option+C word capitalization. The Alt+C (`Esc` then `c`)
+binding was verified on macOS. Physical Option+C delivery relies on Ghostty's
+Option-as-Alt setting and remains untested. These bindings do not overlap the
+managed AeroSpace or tmux bindings; tmux's Option+H/J/K/L and Option+1–9 remain
+intercepted.
+
+### Shell Aliases
+
+Both aliases were verified in isolated shells and confirmed working by the
+user after deployment on the MacBook.
+
+| Alias | Expansion | Purpose |
+| --- | --- | --- |
+| `ll` | `ls -lah` | Detailed, human-readable listing including hidden files |
+| `lt` | `eza --tree --level=2` | Directory tree limited to two levels |
+
+### Useful Commands
+
+Use `rg` for content search, `fd` for filename search, `bat` for highlighted
+reading, and `eza` for optional listings. `ls`, `cat`, `grep`, and `find` retain
+their original commands. No `..` alias is defined. Private or host-specific
+settings belong in the optional untracked `~/.zshrc.local`, sourced last.
+
 ## Neovim
 
 Zed is the primary editor; use `nvim <file>` for quick terminal edits.

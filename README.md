@@ -54,6 +54,9 @@ dotfiles-mac/
 │   └── .config/
 │       └── nvim/
 │           └── init.lua
+├── shell/
+│   ├── .zprofile
+│   └── .zshrc
 ├── README.md
 ├── AGENTS.md
 └── .gitignore
@@ -67,7 +70,7 @@ The reasons behind the configuration are recorded in
 
 ## Current Configuration
 
-Managed packages are `ghostty`, `aerospace`, `starship`, `tmux`, and `nvim`.
+Managed packages are `ghostty`, `aerospace`, `starship`, `tmux`, `nvim`, and `shell`.
 Ghostty adapts the Linux Alacritty appearance:
 
 - JetBrainsMono Nerd Font, size 14.
@@ -93,8 +96,21 @@ system, application, and Logitech shortcuts before deployment. See
 Starship keeps its default Git icons, colours, status information, and other
 modules. Its only overrides remove the blank line before each prompt and put
 the input marker on the same line. This retains Starship rather than recreating
-Fedora's Bash prompt. The existing Mac `~/.zshrc` initializes Starship; that
-shell file is not yet managed by this repository.
+Fedora's Bash prompt. The `shell` package preserves Starship initialization
+in `.zshrc`; Starship appearance remains managed by the separate package.
+
+The `shell` package manages `.zprofile` and `.zshrc` at their native HOME
+paths, without changing ZDOTDIR. It preserves Homebrew login initialization,
+enables native Zsh completion and fzf's built-in Zsh integration, and retains
+10,000 history entries in memory and on disk. Commands append incrementally
+to `~/.zsh_history`, with consecutive duplicates suppressed; history is not
+automatically imported from other running shells.
+
+Aliases are only `ll='ls -lah'` and `lt='eza --tree --level=2'`. Standard
+commands remain unchanged. Use `rg`, `fd`, `bat`, and `eza` directly; no
+additional configuration or installation is performed for them. There are no
+shell frameworks, plugins, or custom fzf generators. An optional untracked
+`~/.zshrc.local` is sourced last for private or host-specific overrides.
 
 Tmux targets Homebrew tmux 3.8. It preserves the Fedora Ctrl+A prefix,
 Vim-style pane navigation and copy mode, Option-only navigation, one-based
@@ -122,8 +138,6 @@ retains Neovim defaults: no plugins, themes, LSP, or custom mappings.
 
 ## Planned Direction
 
-- Shell: retain Zsh and Starship; manage small shell fragments and private
-  local overrides when reviewed.
 - Use native launcher, menu bar, locking, screenshots, and system controls
   initially.
 - Zed settings are available in the Linux reference. That repository has
@@ -218,6 +232,65 @@ stow --delete --target="$HOME" ghostty
 
 Unstowing does not uninstall Ghostty.
 
+### Zsh: deployment and verification
+
+Inspect `~/.zprofile`, `~/.zshrc`, `~/.zshenv`, ZDOTDIR, and any
+`~/.zshrc.local`. A custom ZDOTDIR requires a separate path review.
+Homebrew, Starship, and fzf must be installed separately; `lt` also needs eza.
+Homebrew initialization stays in `.zprofile`; `.zshrc` also adds Homebrew's
+completion directory for non-login interactive shells, without repeating
+Homebrew PATH initialization. Native `compinit` retains its security checks.
+
+```bash
+cd "$HOME/repos/dotfiles-mac"
+stow --no --verbose=2 --target="$HOME" shell
+```
+
+Stage 4A is deployed on the MacBook with Stow-managed `.zprofile` and `.zshrc`
+symlinks. The user confirmed login startup, Starship appearance, native Git Tab
+completion, fzf Ctrl+R history search, both aliases, and HISTSIZE/SAVEHIST of
+10,000. Ctrl+T, Option+C, and `**` followed by Tab remain configured but have
+not yet been interactively confirmed; see [shortcuts](docs/shortcuts.md).
+
+On a machine with regular files at these destinations, Stow reports conflicts
+and aborts without changing them. Do not use `--adopt`. The following procedure
+is only for replacing regular files after explicit deployment approval; do not
+repeat it over the existing managed symlinks. Run it in a subshell so a failed
+step stops the procedure without exiting your working shell:
+
+```bash
+(
+    set -eu
+    cd "$HOME/repos/dotfiles-mac"
+    test -z "${ZDOTDIR:-}"
+    test -f "$HOME/.zprofile"
+    test ! -L "$HOME/.zprofile"
+    test -f "$HOME/.zshrc"
+    test ! -L "$HOME/.zshrc"
+    shell_backup=$(mktemp -d "$HOME/.zsh-backup.XXXXXXXX")
+    chmod 700 "$shell_backup"
+    cp -p "$HOME/.zprofile" "$shell_backup/.zprofile"
+    cp -p "$HOME/.zshrc" "$shell_backup/.zshrc"
+    cmp "$HOME/.zprofile" "$shell_backup/.zprofile"
+    cmp "$HOME/.zshrc" "$shell_backup/.zshrc"
+    printf 'Verified backups: %s\n' "$shell_backup"
+    rm "$HOME/.zprofile" "$HOME/.zshrc"
+    stow --no --verbose=2 --target="$HOME" shell
+    stow --verbose=1 --target="$HOME" shell
+    test -L "$HOME/.zprofile" && test -L "$HOME/.zshrc"
+    ls -l "$HOME/.zprofile" "$HOME/.zshrc"
+    cmp "$HOME/.zprofile" shell/.zprofile
+    cmp "$HOME/.zshrc" shell/.zshrc
+)
+```
+
+Keep the printed backup directory. If deployment fails after removing the
+original files, leave the current terminal open. Preview and run
+`stow --delete --target="$HOME" shell` to remove any package links, then copy
+both backup files back only after checking that their destinations are absent.
+Do not overwrite an unexpected file or symlink. Deployment does not reload the
+current shell; interactive checks in a new terminal require separate approval.
+
 ## Local and Private Configuration
 
 Keep credentials, private keys, browser profiles, histories, caches,
@@ -262,6 +335,14 @@ verify number, relativenumber, and clipboard options. Check clipboard-provider
 availability without changing clipboard contents; after deployment, verify
 line numbers and normal editing interactively.
 
+Validate shell syntax with `/bin/zsh -n shell/.zprofile` and
+`/bin/zsh -n shell/.zshrc`. Exercise startup in isolated login and non-login
+interactive child shells with temporary HOME, ZDOTDIR, and XDG state/cache/data
+directories. Check completion registrations, fzf widgets and bindings, history
+options, aliases, and local override ordering without touching user history or
+completion dumps. After authorized deployment, verify fzf selection and prompt
+appearance interactively in Ghostty, both outside and inside tmux.
+
 ## References
 
 - https://ghostty.org/docs/config
@@ -269,3 +350,7 @@ line numbers and normal editing interactively.
 - https://nikitabobko.github.io/AeroSpace/guide
 - https://nikitabobko.github.io/AeroSpace/commands
 - https://starship.rs/config/
+- https://zsh.sourceforge.io/Doc/Release/Files.html
+- https://zsh.sourceforge.io/Doc/Release/Options.html
+- https://docs.brew.sh/Shell-Completion
+- https://github.com/junegunn/fzf#shell-integration

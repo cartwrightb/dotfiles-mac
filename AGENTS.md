@@ -19,10 +19,12 @@ work here. Make macOS changes only in `~/repos/dotfiles-mac`.
 - Package contents mirror paths below `$HOME`.
 - Use XDG paths when supported by the application on macOS.
 - README.md, AGENTS.md, and .gitignore are repository metadata.
-- Managed packages are `ghostty`, `aerospace`, `starship`, `tmux`, and `nvim`.
+- Managed packages are `ghostty`, `aerospace`, `starship`, `tmux`, `nvim`, and `shell`.
 - Do not create placeholder packages or copy entire third-party setups.
 - Keep significant design decisions in `docs/decisions.md` and keyboard
   commands in `docs/shortcuts.md`; keep both consistent with the packages.
+- Whenever Codex introduces, changes, or removes a keyboard shortcut, alias,
+  or custom command, update `docs/shortcuts.md` in the same change.
 
 ## Design Rules
 
@@ -44,6 +46,11 @@ work here. Make macOS changes only in `~/repos/dotfiles-mac`.
   Use Ghostty's RGB declaration; do not add plugins or startup automation.
 - Prefer Ctrl+A followed by h/j/k/l for tmux pane navigation. Preserve the
   existing Option bindings as alternatives; do not add Ghostty key overrides.
+- Zsh uses native compinit and fzf integration, 10,000-entry history with
+  incremental append and consecutive duplicate suppression, and only the
+  reviewed `ll` and `lt` aliases. Keep Homebrew in `.zprofile`, Starship in
+  `.zshrc`, and optional untracked `~/.zshrc.local` last. Add no frameworks,
+  plugins, custom fzf generators, or replacements for standard commands.
 - Zed is the primary editor. Neovim is for quick terminal edits; configure
   only absolute/relative line numbers and `clipboard = "unnamedplus"`.
   Do not add plugins, themes, LSP, custom mappings, or other settings.
@@ -79,6 +86,11 @@ XDG_CONFIG_HOME, and Homebrew's `/opt/homebrew/etc/tmux.conf` before deployment.
 For Neovim, inspect `~/.config/nvim/init.lua` and `init.vim`, XDG_CONFIG_HOME,
 and NVIM_APPNAME before deployment. The package uses the default XDG path.
 
+For Zsh, inspect `~/.zprofile`, `~/.zshrc`, `~/.zshenv`, ZDOTDIR, and any
+`~/.zshrc.local` before deployment. The package targets startup files in HOME;
+review separately if ZDOTDIR selects another directory. Preserve existing
+regular files until backup and deployment are explicitly authorized.
+
 ## Private Data
 
 Never commit secrets, credentials, tokens, cookies, private keys,
@@ -102,5 +114,9 @@ Preserve unrelated user changes.
 - For AeroSpace, parse TOML and use `aerospace reload-config --dry-run`
   when available. It checks the app's configured path, not an arbitrary
   repository file; do not deploy or reload merely to enable validation.
+- Validate Zsh syntax with `zsh -n`. Validate startup, completion, history
+  options, aliases, and fzf widgets in child shells with temporary HOME,
+  ZDOTDIR, and XDG state/cache/data paths. Never source the repository files
+  into the working shell or read/write the user's history for validation.
 - Report checks that could not run and why.
 - Check appearance and keyboard behaviour after an authorized deployment.
