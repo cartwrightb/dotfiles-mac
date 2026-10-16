@@ -10,3 +10,6 @@ window-padding-y = 8
 
 # Preserve Alt-based terminal and tmux shortcuts.
 macos-option-as-alt = true
+
+# Send Alt+C to fzf instead of macOS's cedilla character.
+keybind = alt+c=esc:c

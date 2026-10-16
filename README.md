@@ -249,8 +249,11 @@ stow --no --verbose=2 --target="$HOME" shell
 Stage 4A is deployed on the MacBook with Stow-managed `.zprofile` and `.zshrc`
 symlinks. The user confirmed login startup, Starship appearance, native Git Tab
 completion, fzf Ctrl+R history search, both aliases, and HISTSIZE/SAVEHIST of
-10,000. Ctrl+T, Option+C, and `**` followed by Tab remain configured but have
-not yet been interactively confirmed; see [shortcuts](docs/shortcuts.md).
+10,000. Option+C was also confirmed in a temporary Ghostty instance with the
+explicit `keybind = alt+c=esc:c`, now included in the Ghostty package to send
+ESC followed by lowercase c instead of `ç`. Ctrl+T and `**` followed by Tab
+remain configured but have not yet been interactively confirmed;
+see [shortcuts](docs/shortcuts.md).
 
 On a machine with regular files at these destinations, Stow reports conflicts
 and aborts without changing them. Do not use `--adopt`. The following procedure

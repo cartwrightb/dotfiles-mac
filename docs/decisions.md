@@ -32,7 +32,12 @@ Mac settings rather than an exact copy of Fedora's font size and opacity.
 
 Keep `macos-option-as-alt = true`. Remove the experimental explicit
 Option+H/J/K/L escape-sequence bindings. Prefer tmux prefix navigation instead
-of adding terminal key overrides to work around Option input behaviour.
+of adding terminal pane-navigation overrides.
+
+Use the explicit `keybind = alt+c=esc:c` for fzf directory navigation. Option+C
+produced `ç` despite Option-as-Alt being enabled; this binding sends ESC followed
+by lowercase c to Zsh's fzf-cd-widget. The user confirmed it works in a temporary
+Ghostty instance. Preserve all other Option handling and shortcuts.
 
 ## AeroSpace
 

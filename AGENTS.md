@@ -45,7 +45,8 @@ work here. Make macOS changes only in `~/repos/dotfiles-mac`.
   mouse behaviour, numbering, split directories, and status palette.
   Use Ghostty's RGB declaration; do not add plugins or startup automation.
 - Prefer Ctrl+A followed by h/j/k/l for tmux pane navigation. Preserve the
-  existing Option bindings as alternatives; do not add Ghostty key overrides.
+  existing Option bindings as alternatives; do not add Ghostty pane-navigation
+  overrides. Preserve the tested `alt+c=esc:c` binding for fzf directory navigation.
 - Zsh uses native compinit and fzf integration, 10,000-entry history with
   incremental append and consecutive duplicate suppression, and only the
   reviewed `ll` and `lt` aliases. Keep Homebrew in `.zprofile`, Starship in

@@ -119,15 +119,18 @@ checks remain pending as listed below; tmux-specific checks were not reported.
 | `**` then Tab, e.g. `nvim **` | fzf fuzzy completion | Configured; interactive check pending |
 | Ctrl+R | fzf fuzzy command-history search | Confirmed interactively |
 | Ctrl+T | fzf fuzzy file selection; insert selected file/directory paths | Binding verified; interactive check pending |
-| Option+C | fzf fuzzy directory navigation; change to the selected directory | Alt+C binding verified; physical Option+C check pending |
+| Option+C | fzf fuzzy directory navigation; change to the selected directory | Confirmed interactively in Ghostty with the explicit binding |
 | Ctrl+A | Beginning of line; inside tmux, press Ctrl+A twice | Zsh binding verified; interactive check pending |
 
 fzf replaces Zsh's default Ctrl+R incremental history search, Ctrl+T character
-transposition, and Option+C word capitalization. The Alt+C (`Esc` then `c`)
-binding was verified on macOS. Physical Option+C delivery relies on Ghostty's
-Option-as-Alt setting and remains untested. These bindings do not overlap the
-managed AeroSpace or tmux bindings; tmux's Option+H/J/K/L and Option+1–9 remain
-intercepted.
+transposition, and Option+C word capitalization. Ghostty explicitly binds
+`keybind = alt+c=esc:c` to send ESC followed by lowercase c to Zsh's
+fzf-cd-widget. This fixes Option+C producing `ç` despite
+`macos-option-as-alt = true`; the user confirmed the binding works in a temporary
+Ghostty instance. Esc followed by lowercase c also opens the finder. These
+bindings do not overlap the managed AeroSpace or tmux bindings; tmux's
+Option+H/J/K/L and Option+1–9 remain intercepted. Option+C inside tmux has not
+yet been interactively confirmed.
 
 ### Shell Aliases
 
