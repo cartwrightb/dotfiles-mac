@@ -53,7 +53,24 @@ layouts. Use `/usr/bin/open -a Ghostty`, which may activate an existing window.
 Keep zero gaps and avoid extra bars or appearance helpers. Use native macOS
 launching, locking, screenshots, and system controls. Login startup and
 automatic reload remain disabled. Document the Ctrl+Option conflict with
-VoiceOver. Dual-monitor workspace assignments remain a later stage.
+VoiceOver.
+
+Stage 5A uses `workspace-to-monitor-force-assignment` with portable display
+roles instead of host-specific monitor IDs or ambiguous identical model names.
+In the closed-lid two-display setup, the top PHL 345B1C is secondary (reported
+monitor 1) and receives 2, 4, 6, 8, 10. The bottom PHL 345B1C is main (reported
+monitor 2) and receives 1, 3, 5, 7, 9.
+
+Odd workspaces select `main`; even workspaces try `['secondary', 'main']` in
+order. With only the built-in display active, every workspace is expected to
+select main, requiring no scripts, manual edits, or reload hooks for undocking.
+This undocked behaviour has not yet been physically tested. Physical
+placement depends on keeping the bottom display main. The `secondary` selector
+is documented for exactly two monitors; three active displays require a
+separate design. Forced assignments prevent manual workspace-to-monitor moves.
+Existing bindings and all other settings are preserved. Stage 5A is deployed
+through Stow; the user confirmed the docked odd/even monitor assignments and
+existing shortcuts work interactively. Native dry-run validation also passed.
 
 ## Zsh and Starship
 

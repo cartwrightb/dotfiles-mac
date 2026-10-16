@@ -89,6 +89,26 @@ Option-only tmux shortcuts, and Ctrl+A remain available. Layouts retain
 AeroSpace's default container normalization and zero gaps. Login startup and
 automatic reload are disabled.
 
+Stage 5A adds `workspace-to-monitor-force-assignment` for the closed-lid,
+vertically stacked two-monitor setup:
+
+| Display | AeroSpace selector | Workspaces |
+| --- | --- | --- |
+| Top: monitor 1, PHL 345B1C (1), secondary | `['secondary', 'main']` | 2, 4, 6, 8, 10 |
+| Bottom: monitor 2, PHL 345B1C (2), main | `'main'` | 1, 3, 5, 7, 9 |
+
+The first available selector wins. Undocked with only the built-in display,
+all ten workspaces are expected to use that main display without configuration
+edits; this has not yet been physically tested. Selectors
+follow display roles rather than monitor numbers or duplicate model names;
+keep the bottom display designated main in macOS. The two-display mapping does
+not cover an open lid with both externals active or other three-display setups.
+Forced workspaces cannot be reassigned with `move-workspace-to-monitor`.
+Stage 5A is deployed through Stow and interactively tested on the MacBook.
+The user confirmed odd workspaces on the bottom/main display, even workspaces
+on the top/secondary display, and continued operation of existing AeroSpace
+shortcuts. Native dry-run validation passed. Automatic reload remains disabled.
+
 Ctrl+Option conflicts with VoiceOver when it uses that modifier. Review custom
 system, application, and Logitech shortcuts before deployment. See
 [docs/shortcuts.md](docs/shortcuts.md) for bindings and Sway differences.
@@ -142,7 +162,6 @@ retains Neovim defaults: no plugins, themes, LSP, or custom mappings.
   initially.
 - Zed settings are available in the Linux reference. That repository has
   no Neovim configuration to migrate.
-- Dual-monitor workspace assignments remain a later stage.
 
 Fedora startup, systemd integration, GTK settings, Wayland utilities,
 Linux hardware identifiers, and host-specific window rules are omitted.

@@ -27,6 +27,25 @@ Design rationale is recorded in [decisions.md](decisions.md).
 Ghostty is launched with `/usr/bin/open -a Ghostty`. If already running, this
 may activate its existing window rather than create a new terminal.
 
+### Workspace Placement (Stage 5A)
+
+The existing workspace shortcuts keep their keys. Switching a workspace focuses
+its assigned monitor; Shift moves the window to that workspace without following.
+
+| Workspaces | Assigned display with lid closed |
+| --- | --- |
+| 1, 3, 5, 7, 9 | Bottom PHL 345B1C, main (reported monitor 2) |
+| 2, 4, 6, 8, 10 | Top PHL 345B1C, secondary (reported monitor 1) |
+
+Ctrl+Option+0 still selects workspace 10; add Shift to send a window there.
+Undocked with only the built-in display, all ten workspaces are expected to
+use main; this has not yet been physically tested. Even workspaces select
+secondary first, with main as fallback. Keep the bottom
+external display main in macOS; three active displays are outside this mapping.
+Forced assignments block `move-workspace-to-monitor`. No new keys or custom
+commands are introduced. Stage 5A is deployed; the user confirmed the docked
+monitor assignments and existing AeroSpace shortcuts work interactively.
+
 ## Resize Mode
 
 | Shortcut | Action |

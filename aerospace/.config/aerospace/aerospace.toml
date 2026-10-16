@@ -6,6 +6,20 @@ auto-reload-config = false
 
 persistent-workspaces = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
 
+# Bottom is main; top is secondary with exactly two active displays.
+# Fall back to main when undocked, so every workspace remains available.
+[workspace-to-monitor-force-assignment]
+1 = 'main'
+2 = ['secondary', 'main']
+3 = 'main'
+4 = ['secondary', 'main']
+5 = 'main'
+6 = ['secondary', 'main']
+7 = 'main'
+8 = ['secondary', 'main']
+9 = 'main'
+10 = ['secondary', 'main']
+
 # Retain default tiling, container normalization, QWERTY mapping,
 # and zero gaps. No Command or Option-only bindings.
 
